@@ -19,9 +19,9 @@ namespace AdditionalTask
                 testList.Add(temp);
             }
 
-            List<Cluster> Netemp = ClasterizationWithNumber(testList, 2);
+            List<Cluster> testClusters = ClasterizationWithNumber(testList, 2);
 
-            foreach (Cluster cluster in Netemp) {
+            foreach (Cluster cluster in testClusters) {
                 Console.WriteLine(cluster.ToString());
                 Console.WriteLine(new string('-',50));
             }
@@ -38,7 +38,7 @@ namespace AdditionalTask
                 temp.Center = new WeightCenter(random.Next(0,100), random.Next(0,100));
                 clusterList.Add(temp);
             }
-           //changed something
+           
             while (true) {
                 foreach (Baggage currentBaggage in list) {
                     double minDistance = clusterList[0].GetDistance(currentBaggage.Fragility, currentBaggage.Weight);
