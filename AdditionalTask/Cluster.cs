@@ -19,7 +19,7 @@ namespace AdditionalTask {
             return temp;
 
         }
-
+        //added 
         public double GetDistance(double x, double y) {
             return Math.Sqrt(Math.Pow(x - Center.X, 2) + Math.Pow(y - Center.Y, 2));
         }
