@@ -20,7 +20,7 @@ namespace AdditionalTask
             }
 
             List<Cluster> testClusters = ClasterizationWithNumber(testList, 2);
-
+            //
             foreach (Cluster cluster in testClusters) {
                 Console.WriteLine(cluster.ToString());
                 Console.WriteLine(new string('-',50));
