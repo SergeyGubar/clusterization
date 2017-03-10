@@ -38,7 +38,7 @@ namespace AdditionalTask
                 temp.Center = new WeightCenter(random.Next(0,100), random.Next(0,100));
                 clusterList.Add(temp);
             }
-           //
+           //changed something
             while (true) {
                 foreach (Baggage currentBaggage in list) {
                     double minDistance = clusterList[0].GetDistance(currentBaggage.Fragility, currentBaggage.Weight);
