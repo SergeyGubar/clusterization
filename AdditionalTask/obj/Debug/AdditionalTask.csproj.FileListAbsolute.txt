@@ -1,0 +1,6 @@
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\bin\Debug\AdditionalTask.exe.config
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\bin\Debug\AdditionalTask.exe
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\bin\Debug\AdditionalTask.pdb
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\obj\Debug\AdditionalTask.csprojResolveAssemblyReference.cache
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\obj\Debug\AdditionalTask.exe
+c:\users\sergey\documents\visual studio 2017\Projects\AdditionalTask\AdditionalTask\obj\Debug\AdditionalTask.pdb
