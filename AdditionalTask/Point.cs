@@ -1,11 +1,11 @@
 ﻿
 namespace AdditionalTask
 {
-    class WeightCenter {
+    class Point {
         public double X;
         public double Y;
 
-        public WeightCenter(double x, double y) {
+        public Point(double x, double y) {
             X = x;
             Y = y;
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace AdditionalTask {
     class Cluster {
         public List<Baggage> Content = new List<Baggage>();
-        public WeightCenter Center;
+        public Point Center;
 
         
         public Cluster() {
@@ -19,7 +19,7 @@ namespace AdditionalTask {
             return temp;
 
         }
-        //added 
+        
         public double GetDistance(double x, double y) {
             return Math.Sqrt(Math.Pow(x - Center.X, 2) + Math.Pow(y - Center.Y, 2));
         }
