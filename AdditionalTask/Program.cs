@@ -85,5 +85,30 @@ namespace AdditionalTask
             return clusterList;
 
         }
+
+        //public static List<Cluster> ClasterizationWithDelta(List<Baggage> list, int delta) {
+
+        //    List<Cluster> temp = new List<Cluster>();
+
+        //    double minWeight = list[0].Weight;
+        //    double minFragility = list[0].Fragility;
+        //    double maxWeight = list[0].Weight;
+        //    double maxFragility = list[0].Fragility;
+
+
+
+        //    foreach (Baggage currentBaggage in list) {
+        //        if (currentBaggage.Weight < minWeight) {
+        //            minWeight = currentBaggage.Weight;
+        //        } else if (currentBaggage.Weight > maxWeight) {
+        //            maxWeight = currentBaggage.Weight;
+        //        }
+        //        if (currentBaggage.Fragility < minFragility) {
+        //            minFragility = currentBaggage.Fragility;
+        //        } else if (currentBaggage.Fragility > maxFragility) {
+        //            maxFragility = currentBaggage.Fragility;
+        //        }
+        //    }
+        //}
     }
 }
