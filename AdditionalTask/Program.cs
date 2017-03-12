@@ -30,7 +30,17 @@ namespace AdditionalTask
             for (int i = 0; i < testClusters.GetLength(0); i++) {
                 for (int j = 0; j < testClusters.GetLength(1); j++) {
                     for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
-                        Console.WriteLine(testClusters[i, j].Content[k]);
+                        //Console.Write("Start Fragility of the cluster: " + testClusters[i, j].startX + " ");
+                        //Console.Write("End Fragility of the cluster: " + testClusters[i, j].endX + " ");
+                        Console.WriteLine();
+                        Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
+                        //Console.Write("Start Weight of the cluster: " + testClusters[i, j].startY + " ");
+                        //Console.Write("End Weight of the cluster: " + testClusters[i, j].endY + " ");
+                        Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
+                        
+                        Console.Write("Fragility of the baggage: " + testClusters[i, j].Content[k].Fragility + " ");
+                        Console.Write("Weight of the baggage: " + testClusters[i, j].Content[k].Weight + " ");
+                        Console.WriteLine();
                     }
                     
                 }
@@ -120,6 +130,9 @@ namespace AdditionalTask
                 }
             }
 
+            int xClusters = (int)Math.Ceiling(minFragility / delta);  //number of clusters deleted because of relative coordinates
+            int yClusters = (int)Math.Ceiling(minWeight / delta);
+
             double width = maxFragility - minFragility;
             double height = maxWeight - minWeight;
 
@@ -127,8 +140,7 @@ namespace AdditionalTask
 
             Cluster[,] temp = new Cluster[Convert.ToInt32(Math.Ceiling(height / delta)),Convert.ToInt32(Math.Ceiling(width / delta))];
 
-
-
+            
 
             for (int i = 0; i < temp.GetLength(0); i++) {
                 for (int j = 0; j < temp.GetLength(1); j++) {
@@ -136,10 +148,23 @@ namespace AdditionalTask
                 }
             }
 
+            for (int i = 0; i < temp.GetLength(0); i++) {
+                for (int j = 0; j < temp.GetLength(1); j++) {
+
+                    temp[i, j].startX = minFragility + delta * j;
+                    temp[i, j].endX = minFragility + delta * (j + 1);
+                    temp[i, j].startY = minWeight + delta * i;
+                    temp[i, j].endY = minWeight + delta * (i + 1);
+
+
+                }
+            }
+
+
 
             foreach (Baggage currentBaggage in list) {
-                int index1 = (int)currentBaggage.Weight / delta;
-                int index2 = (int)currentBaggage.Fragility / delta;
+                int index1 = (int)((currentBaggage.Weight / delta) - yClusters);
+                int index2 = (int)((currentBaggage.Fragility / delta) - xClusters);
                 temp[index1,index2].Content.Add(currentBaggage);
             }
 

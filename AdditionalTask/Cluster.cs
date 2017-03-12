@@ -4,6 +4,13 @@ using System.Collections.Generic;
 namespace AdditionalTask {
     class Cluster {
         public List<Baggage> Content = new List<Baggage>();
+
+        public double startX;
+        public double startY;
+        public double endX;
+        public double endY;
+
+
         public Point Center;
 
         
