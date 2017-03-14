@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,30 +20,23 @@ namespace AdditionalTask
                 testList.Add(temp);
             }
 
-            //List<Cluster> testClusters = ClasterizationWithNumber(testList, 2);
 
-            //foreach (Cluster cluster in testClusters) {
-            //    Console.WriteLine(cluster.ToString());
-            //    Console.WriteLine(new string('-', 50));
-            //}
             Cluster[,] testClusters = ClasterizationWithDelta(testList, 20);
 
             for (int i = 0; i < testClusters.GetLength(0); i++) {
                 for (int j = 0; j < testClusters.GetLength(1); j++) {
                     for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
-                        //Console.Write("Start Fragility of the cluster: " + testClusters[i, j].startX + " ");
-                        //Console.Write("End Fragility of the cluster: " + testClusters[i, j].endX + " ");
+
                         Console.WriteLine();
                         Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
-                        //Console.Write("Start Weight of the cluster: " + testClusters[i, j].startY + " ");
-                        //Console.Write("End Weight of the cluster: " + testClusters[i, j].endY + " ");
+
                         Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
-                        
+
                         Console.Write("Fragility of the baggage: " + testClusters[i, j].Content[k].Fragility + " ");
                         Console.Write("Weight of the baggage: " + testClusters[i, j].Content[k].Weight + " ");
                         Console.WriteLine();
                     }
-                    
+
                 }
             }
 
@@ -104,6 +98,14 @@ namespace AdditionalTask
             }
             return clusterList;
 
+        }
+
+        public static List<SuperCluster> ClasterizationWithNumber1(List<SuperBaggage> baggages, int number,)
+        {
+            List<SuperCluster> temp = new List<SuperCluster>();
+
+
+            return temp;
         }
 
         public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta) {
