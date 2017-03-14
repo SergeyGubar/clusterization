@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,42 @@ namespace AdditionalTask
             }
             return clusterList;
 
+        }
+
+        public static List<SuperCluster> ClusterizationWithNumber(List<SuperBaggage> listOfBaggages, int number, string[] props)
+        {
+            List<SuperCluster> temp = new List<SuperCluster>();
+
+
+            for (int i = 0; i < number; i++) {
+
+                SuperCluster tempCluster = new SuperCluster(); //создаем временный кластер
+
+                List<double> centerValues = new List<double>();
+
+                for (int j = 0; j < props.Length; j++) {        
+                    centerValues.Add(random.Next(0,100));
+                }
+
+                tempCluster.Center = new SuperCenter(centerValues); //заполняем центр кластера 
+                temp.Add(tempCluster);  //добавим этот кластер в результат
+                
+
+            }
+
+            while (true) {
+                foreach (SuperBaggage currentSuperBaggage in listOfBaggages) {
+                    
+                }
+            }
+
+
+
+
+
+
+
+            return temp;
         }
 
         public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta) {
