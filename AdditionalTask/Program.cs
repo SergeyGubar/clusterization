@@ -5,6 +5,7 @@ using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace AdditionalTask
 {
     class Program
@@ -100,13 +101,7 @@ namespace AdditionalTask
 
         }
 
-        public static List<SuperCluster> ClasterizationWithNumber1(List<SuperBaggage> baggages, int number,)
-        {
-            List<SuperCluster> temp = new List<SuperCluster>();
-
-
-            return temp;
-        }
+        
 
         public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta) {
 
@@ -131,16 +126,19 @@ namespace AdditionalTask
                     maxFragility = currentBaggage.Fragility;
                 }
             }
+            
+            
+            int xClusters = (int)(minFragility / delta);  //number of clusters deleted because of relative coordinates
+            int yClusters = (int)(minWeight / delta);
 
-            int xClusters = (int)Math.Ceiling(minFragility / delta);  //number of clusters deleted because of relative coordinates
-            int yClusters = (int)Math.Ceiling(minWeight / delta);
+           
 
             double width = maxFragility - minFragility;
             double height = maxWeight - minWeight;
 
             //Point[,] arr = new Point[Convert.ToInt32(Math.Ceiling(width / delta)),Convert.ToInt32(Math.Ceiling(height/delta))];
 
-            Cluster[,] temp = new Cluster[Convert.ToInt32(Math.Ceiling(height / delta)),Convert.ToInt32(Math.Ceiling(width / delta))];
+            Cluster[,] temp = new Cluster[Convert.ToInt32(Math.Ceiling(height / delta) + 10),Convert.ToInt32(Math.Ceiling(width / delta)) + 10];
 
             
 
@@ -165,9 +163,25 @@ namespace AdditionalTask
 
 
             foreach (Baggage currentBaggage in list) {
-                int index1 = (int)((currentBaggage.Weight / delta) - yClusters);
-                int index2 = (int)((currentBaggage.Fragility / delta) - xClusters);
+
+                
+
+                int index1 = (int)(((currentBaggage.Weight / delta)) - yClusters);
+                int index2 = (int)(((currentBaggage.Fragility / delta)) - xClusters);
+
+                Console.WriteLine("Index 1: " + index1);
+                
+                Console.WriteLine("Index 2: " + index2);
+
+                Console.WriteLine(new string('-',50));
+
+
+
+
+
                 temp[index1,index2].Content.Add(currentBaggage);
+
+
             }
 
 
