@@ -143,35 +143,33 @@ namespace AdditionalTask
             return temp;
         }
 
-        public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta) {
-
-            
-
-            double minWeight = list[0].Weight;
-            double minFragility = list[0].Fragility;
-            double maxWeight = list[0].Weight;
-            double maxFragility = list[0].Fragility;
+        public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta)
+        {
 
 
 
-            foreach (Baggage currentBaggage in list) {
-                if (currentBaggage.Weight < minWeight) {
-                    minWeight = currentBaggage.Weight;
-                } else if (currentBaggage.Weight > maxWeight) {
-                    maxWeight = currentBaggage.Weight;
+
+            double minFragility = 0;
+            double minWeight = 0;
+            double maxWeight = 0;
+            double maxFragility = 0;
+
+
+
+
+            foreach (Baggage current in list) {
+                if (current.Weight > maxWeight) {
+                    maxWeight = current.Weight;
                 }
-                if (currentBaggage.Fragility < minFragility) {
-                    minFragility = currentBaggage.Fragility;
-                } else if (currentBaggage.Fragility > maxFragility) {
-                    maxFragility = currentBaggage.Fragility;
+                if (current.Fragility > maxFragility) {
+                    maxFragility = current.Fragility;
                 }
             }
 
-            int xClusters = (int)Math.Ceiling(minFragility / delta);  //number of clusters deleted because of relative coordinates
-            int yClusters = (int)Math.Ceiling(minWeight / delta);
+           
 
-            double width = maxFragility - minFragility;
-            double height = maxWeight - minWeight;
+            double width = maxFragility;
+            double height = maxWeight;
 
             //Point[,] arr = new Point[Convert.ToInt32(Math.Ceiling(width / delta)),Convert.ToInt32(Math.Ceiling(height/delta))];
 
@@ -200,8 +198,8 @@ namespace AdditionalTask
 
 
             foreach (Baggage currentBaggage in list) {
-                int index1 = (int)((currentBaggage.Weight / delta) - yClusters);
-                int index2 = (int)((currentBaggage.Fragility / delta) - xClusters);
+                int index1 = (int)(currentBaggage.Weight / delta);
+                int index2 = (int)(currentBaggage.Fragility / delta);
                 temp[index1,index2].Content.Add(currentBaggage);
             }
 
