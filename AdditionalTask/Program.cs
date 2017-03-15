@@ -27,20 +27,30 @@ namespace AdditionalTask
             //    Console.WriteLine(new string('-', 50));
             //}
             Cluster[,] testClusters = ClasterizationWithDelta(testList, 20);
-
+            
             for (int i = 0; i < testClusters.GetLength(0); i++) {
                 for (int j = 0; j < testClusters.GetLength(1); j++) {
-                    for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
-                        //Console.Write("Start Fragility of the cluster: " + testClusters[i, j].startX + " ");
-                        //Console.Write("End Fragility of the cluster: " + testClusters[i, j].endX + " ");
+                    if (testClusters[i, j].Content.Count == 0) {
                         Console.WriteLine();
                         Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
-                        //Console.Write("Start Weight of the cluster: " + testClusters[i, j].startY + " ");
-                        //Console.Write("End Weight of the cluster: " + testClusters[i, j].endY + " ");
+                        
+                        Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
+                        Console.WriteLine("No elements in this cluster");
+                        Console.WriteLine();
+                    }
+
+                    for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
+
+                        
+
+                        Console.WriteLine();
+                        Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
+                        
                         Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
                         
                         Console.Write("Fragility of the baggage: " + testClusters[i, j].Content[k].Fragility + " ");
                         Console.Write("Weight of the baggage: " + testClusters[i, j].Content[k].Weight + " ");
+
                         Console.WriteLine();
                     }
                     
