@@ -95,7 +95,7 @@ namespace AdditionalTask
             Console.ReadKey();
 
 
-
+            
         }
 
         public static List<Cluster> ClusterizationWithNumber(List<Baggage> list, int number) {
@@ -178,8 +178,10 @@ namespace AdditionalTask
 
             while (true) {
                 foreach (SuperBaggage currentSuperBaggage in listOfBaggages) {
+
                     double minDistance = temp[0].GetDistance(currentSuperBaggage.Coords);
-                    SuperCluster minCluster = new SuperCluster();
+                    SuperCluster minCluster = temp[0];
+
                     foreach (SuperCluster cluster in temp) {
                         double currentDistance = cluster.GetDistance(currentSuperBaggage.Coords);
                         if (currentDistance <= minDistance) {
@@ -187,12 +189,16 @@ namespace AdditionalTask
                             minCluster = cluster;
                         }
                     }
+                    
+
                     minCluster.Content.Add(currentSuperBaggage);
 
                 }
+
                 bool isCompleted = true;
 
                 foreach (SuperCluster currentCluster in temp) {
+
                     List<double> midCoordinates = new List<double>();
                     List<double> sumCoordinates = new List<double>();
 
@@ -209,11 +215,12 @@ namespace AdditionalTask
 
                     for (int j = 0; j < currentCluster.Center.Coords.Count; j++) {
                         
-                        if (Math.Abs(currentCluster.Center.Coords[j] - midCoordinates[j]) > 1) {
+                        if (Math.Abs(currentCluster.Center.Coords[j] - midCoordinates[j]) > 0.5) {
                            
                             currentCluster.Center.Coords[j] = midCoordinates[j];
                             isCompleted = false;
-                            /*currentCluster.Content.Clear();*/ // <----- ШПИОН
+                            currentCluster.Content.Clear(); // <----- ШПИОН
+
                         }
 
                         //TODO пофиксить вот то что сверху ^
@@ -237,15 +244,10 @@ namespace AdditionalTask
         public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta)
         {
 
-
-
-
             double minFragility = 0;
             double minWeight = 0;
             double maxWeight = 0;
             double maxFragility = 0;
-
-
 
 
             foreach (Baggage current in list) {
@@ -300,5 +302,9 @@ namespace AdditionalTask
 
 
         }
+
+        
+
+
     }
 }

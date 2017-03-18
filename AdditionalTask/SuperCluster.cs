@@ -11,7 +11,7 @@ namespace AdditionalTask
         public List<SuperBaggage> Content = new List<SuperBaggage>();
 
         public SuperCenter Center;
-        //TODO: OVERRIDE TOSTRING
+        
 
         public SuperCluster()
         {
@@ -30,9 +30,13 @@ namespace AdditionalTask
             //    temp += ("Coord with name " + Content + " equals to + " + coord);
             //}
 
-            for (int i = 0; i < Center.Coords.Count; i++) {
-                temp += "Center coord with name: " + Content[i].Properties[i] + " = " + Center.Coords[i] + "\n";
-            }
+            //for (int i = 0; i < Content.Count; i++) {
+            //    temp += "Center coord with name: " + Content[i].Properties[i] + " = " + Center.Coords[i] + "\n";
+            //}
+
+            //for (int i = 0; i < Content.Count; i++) {
+            //    temp += Content + "\n";
+            //}
 
             temp += "\n";
 
@@ -53,6 +57,7 @@ namespace AdditionalTask
        
         public double GetDistance(List<double> pointCoords)
         {
+
             double result = 0;
 
             
