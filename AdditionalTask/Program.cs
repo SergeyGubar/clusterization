@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
@@ -14,38 +15,93 @@ namespace AdditionalTask
 
         static void Main(string[] args)
         {
-            List<Baggage> testList = new List<Baggage>();
+
+            #region TestWithDelta
+
+
+            //List<Baggage> testList = new List<Baggage>();
+
+            //for (int i = 0; i < 10; i++) {
+            //    Baggage temp = new Baggage(random.Next(0, 100), random.Next(0, 100));
+            //    testList.Add(temp);
+            //}
+
+
+            //Cluster[,] testClusters = ClasterizationWithDelta(testList, 20);
+
+            //for (int i = 0; i < testClusters.GetLength(0); i++) {
+            //    for (int j = 0; j < testClusters.GetLength(1); j++) {
+            //        if (testClusters[i, j].Content.Count == 0) {
+            //            Console.WriteLine();
+            //            Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
+
+            //            Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
+            //            Console.WriteLine("No elements in this cluster");
+            //            Console.WriteLine();
+            //        }
+
+            //        for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
+
+
+
+            //            Console.WriteLine();
+            //            Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
+
+            //            Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
+
+            //            Console.Write("Fragility of the baggage: " + testClusters[i, j].Content[k].Fragility + " ");
+            //            Console.Write("Weight of the baggage: " + testClusters[i, j].Content[k].Weight + " ");
+
+            //            Console.WriteLine();
+            //        }
+
+            //    }
+            //}
+
+            #endregion
+
+            #region TestWithNumber
+            string[] properties = { "Weight", "Fragility"};
+            List<SuperCluster> testClustersList = new List<SuperCluster>();
+            List<SuperBaggage> testListBaggages = new List<SuperBaggage>();
 
             for (int i = 0; i < 10; i++) {
-                Baggage temp = new Baggage(random.Next(0, 100), random.Next(0, 100));
-                testList.Add(temp);
-            }
 
+                List<double> temp = new List<double>();
+                
 
-            Cluster[,] testClusters = ClasterizationWithDelta(testList, 20);
-
-            for (int i = 0; i < testClusters.GetLength(0); i++) {
-                for (int j = 0; j < testClusters.GetLength(1); j++) {
-                    for (int k = 0; k < testClusters[i, j].Content.Count; k++) {
-
-                        Console.WriteLine();
-                        Console.WriteLine("Fragility of the cluster: {0} - {1}", testClusters[i, j].startX, testClusters[i, j].endX);
-
-                        Console.WriteLine("Weight of the cluster: {0} - {1}", testClusters[i, j].startY, testClusters[i, j].endY);
-
-                        Console.Write("Fragility of the baggage: " + testClusters[i, j].Content[k].Fragility + " ");
-                        Console.Write("Weight of the baggage: " + testClusters[i, j].Content[k].Weight + " ");
-                        Console.WriteLine();
-                    }
-
+                for (int j = 0; j < properties.Length; j++) {
+                    temp.Add(random.Next(0,100));
                 }
+
+                testListBaggages.Add(new SuperBaggage(properties, temp));
+
+
+            }
+
+
+            testClustersList = ClusterizationWithNumber(testListBaggages, 3, properties);
+
+            Console.WriteLine(testClustersList);
+
+            foreach (SuperCluster currCluster in testClustersList) {
+                Console.WriteLine(currCluster);
             }
 
 
 
+
+
+
+            #endregion
+
+            Console.ReadKey();
+
+
+            
         }
 
-        public static List<Cluster> ClasterizationWithNumber(List<Baggage> list, int number) {
+        public static List<Cluster> ClusterizationWithNumber(List<Baggage> list, int number) {
             List<Cluster> clusterList = new List<Cluster>();
      
             for (int i = 0; i < number; i++) {
@@ -101,29 +157,109 @@ namespace AdditionalTask
 
         }
 
-        
 
-        public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta) {
+        public static List<SuperCluster> ClusterizationWithNumber(List<SuperBaggage> listOfBaggages, int number, string[] props)
+        {
 
-            
-
-            double minWeight = list[0].Weight;
-            double minFragility = list[0].Fragility;
-            double maxWeight = list[0].Weight;
-            double maxFragility = list[0].Fragility;
+            List<SuperCluster> temp = new List<SuperCluster>();
 
 
+            for (int i = 0; i < number; i++) {
 
-            foreach (Baggage currentBaggage in list) {
-                if (currentBaggage.Weight < minWeight) {
-                    minWeight = currentBaggage.Weight;
-                } else if (currentBaggage.Weight > maxWeight) {
-                    maxWeight = currentBaggage.Weight;
+                SuperCluster tempCluster = new SuperCluster(); //создаем временный кластер
+
+                List<double> centerValues = new List<double>();
+
+                for (int j = 0; j < props.Length; j++) {        
+                    centerValues.Add(random.Next(0,100));
                 }
-                if (currentBaggage.Fragility < minFragility) {
-                    minFragility = currentBaggage.Fragility;
-                } else if (currentBaggage.Fragility > maxFragility) {
-                    maxFragility = currentBaggage.Fragility;
+
+                tempCluster.Center = new SuperCenter(centerValues); //заполняем центр кластера 
+                temp.Add(tempCluster);  //добавим этот кластер в результат
+                
+
+            }
+
+            while (true) {
+                foreach (SuperBaggage currentSuperBaggage in listOfBaggages) {
+
+                    double minDistance = temp[0].GetDistance(currentSuperBaggage.Coords);
+                    SuperCluster minCluster = temp[0];
+
+                    foreach (SuperCluster cluster in temp) {
+                        double currentDistance = cluster.GetDistance(currentSuperBaggage.Coords);
+                        if (currentDistance <= minDistance) {
+                            minDistance = currentDistance;
+                            minCluster = cluster;
+                        }
+                    }
+                    
+
+                    minCluster.Content.Add(currentSuperBaggage);
+
+                }
+
+                bool isCompleted = true;
+
+                foreach (SuperCluster currentCluster in temp) {
+
+                    List<double> midCoordinates = new List<double>();
+                    List<double> sumCoordinates = new List<double>();
+
+                    foreach (SuperBaggage currentSuperBaggage in listOfBaggages) {
+                        for (int i = 0; i < currentSuperBaggage.Coords.Count; i++) {
+                            sumCoordinates.Add(currentSuperBaggage.Coords[i]);
+                        }
+                    }
+
+
+                    for (int i = 0; i < sumCoordinates.Count; i++) {
+                        midCoordinates.Add(sumCoordinates[i] / currentCluster.Content.Count);
+                    }
+
+                    for (int j = 0; j < currentCluster.Center.Coords.Count; j++) {
+                        
+                        if (Math.Abs(currentCluster.Center.Coords[j] - midCoordinates[j]) > 0.5) {
+                           
+                            currentCluster.Center.Coords[j] = midCoordinates[j];
+                            isCompleted = false;
+                            currentCluster.Content.Clear(); // <----- ШПИОН
+
+                        }
+
+                        //TODO пофиксить вот то что сверху ^
+                        
+                    }
+                    
+
+
+
+                }
+                if (isCompleted) {
+                    break;
+
+                }
+
+            }
+            
+            return temp;
+        }
+
+        public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta)
+        {
+
+            double minFragility = 0;
+            double minWeight = 0;
+            double maxWeight = 0;
+            double maxFragility = 0;
+
+
+            foreach (Baggage current in list) {
+                if (current.Weight > maxWeight) {
+                    maxWeight = current.Weight;
+                }
+                if (current.Fragility > maxFragility) {
+                    maxFragility = current.Fragility;
                 }
             }
             
@@ -133,8 +269,8 @@ namespace AdditionalTask
 
            
 
-            double width = maxFragility - minFragility;
-            double height = maxWeight - minWeight;
+            double width = maxFragility;
+            double height = maxWeight;
 
             //Point[,] arr = new Point[Convert.ToInt32(Math.Ceiling(width / delta)),Convert.ToInt32(Math.Ceiling(height/delta))];
 
@@ -156,7 +292,6 @@ namespace AdditionalTask
                     temp[i, j].startY = minWeight + delta * i;
                     temp[i, j].endY = minWeight + delta * (i + 1);
 
-
                 }
             }
 
@@ -164,20 +299,8 @@ namespace AdditionalTask
 
             foreach (Baggage currentBaggage in list) {
 
-                
-
-                int index1 = (int)(((currentBaggage.Weight / delta)) - yClusters);
-                int index2 = (int)(((currentBaggage.Fragility / delta)) - xClusters);
-
-                Console.WriteLine("Index 1: " + index1);
-                
-                Console.WriteLine("Index 2: " + index2);
-
-                Console.WriteLine(new string('-',50));
-
-
-
-
+                int index1 = (int)(currentBaggage.Weight / delta);
+                int index2 = (int)(currentBaggage.Fragility / delta);
 
                 temp[index1,index2].Content.Add(currentBaggage);
 
@@ -191,5 +314,9 @@ namespace AdditionalTask
 
 
         }
+
+        
+
+
     }
 }

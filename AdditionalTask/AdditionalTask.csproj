@@ -47,6 +47,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Point.cs" />
+    <Compile Include="SuperBaggage.cs" />
+    <Compile Include="SuperCenter.cs" />
+    <Compile Include="SuperCluster.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
