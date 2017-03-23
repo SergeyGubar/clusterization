@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,32 +59,32 @@ namespace AdditionalTask
             #endregion
 
             #region TestWithNumber
-            string[] properties = { "Weight", "Fragility"};
-            List<SuperCluster> testClustersList = new List<SuperCluster>();
-            List<SuperBaggage> testListBaggages = new List<SuperBaggage>();
+            //string[] properties = { "Weight", "Fragility"};
+            //List<SuperCluster> testClustersList = new List<SuperCluster>();
+            //List<SuperBaggage> testListBaggages = new List<SuperBaggage>();
 
-            for (int i = 0; i < 10; i++) {
+            //for (int i = 0; i < 10; i++) {
 
-                List<double> temp = new List<double>();
-                
-
-                for (int j = 0; j < properties.Length; j++) {
-                    temp.Add(random.Next(0,100));
-                }
-
-                testListBaggages.Add(new SuperBaggage(properties, temp));
+            //    List<double> temp = new List<double>();
 
 
-            }
+            //    for (int j = 0; j < properties.Length; j++) {
+            //        temp.Add(random.Next(0,100));
+            //    }
+
+            //    testListBaggages.Add(new SuperBaggage(properties, temp));
 
 
-            testClustersList = ClusterizationWithNumber(testListBaggages, 3, properties);
+            //}
 
-            Console.WriteLine(testClustersList);
 
-            foreach (SuperCluster currCluster in testClustersList) {
-                Console.WriteLine(currCluster);
-            }
+            //testClustersList = ClusterizationWithNumber(testListBaggages, 3, properties);
+
+            //Console.WriteLine(testClustersList);
+
+            //foreach (SuperCluster currCluster in testClustersList) {
+            //    Console.WriteLine(currCluster);
+            //}
 
 
 
@@ -95,10 +93,39 @@ namespace AdditionalTask
 
             #endregion
 
+            #region TestWithSuperDelta
+
+            int delta = 20;
+
+            List<Item> items = new List<Item>();
+
+            for (int i = 0; i < 128; i++) {
+                items.Add(new Item(0, RandCoords(4, 0, 60)));
+            }
+
+            List<ItemCluster> cl = MegaClusterizationWithDelta(items, delta);
+            Console.WriteLine("Delta: " + delta);
+            foreach (var c in cl) {
+                Console.Write("Cluster n ------------------------------------\n");
+                Console.WriteLine(c.ToString() + "\n");
+            }
+
+            #endregion
+
+
             Console.ReadKey();
 
-
             
+
+        }
+        static Random rand = new Random();
+        public static List<double> RandCoords(int cords, int min, int max)
+        {
+            List<double> coords = new List<double>();
+            for (int i = 0; i < cords; i++) {
+                coords.Add(rand.Next(min, max));
+            }
+            return coords;
         }
 
         public static List<Cluster> ClusterizationWithNumber(List<Baggage> list, int number) {
@@ -160,9 +187,7 @@ namespace AdditionalTask
 
         public static List<SuperCluster> ClusterizationWithNumber(List<SuperBaggage> listOfBaggages, int number, string[] props)
         {
-
             List<SuperCluster> temp = new List<SuperCluster>();
-
 
             for (int i = 0; i < number; i++) {
 
@@ -175,9 +200,7 @@ namespace AdditionalTask
                 }
 
                 tempCluster.Center = new SuperCenter(centerValues); //заполняем центр кластера 
-                temp.Add(tempCluster);  //добавим этот кластер в результат
-                
-
+                temp.Add(tempCluster);  //добавим этот кластер в результат               
             }
 
             while (true) {
@@ -192,9 +215,7 @@ namespace AdditionalTask
                             minDistance = currentDistance;
                             minCluster = cluster;
                         }
-                    }
-                    
-
+                    }                   
                     minCluster.Content.Add(currentSuperBaggage);
 
                 }
@@ -225,15 +246,8 @@ namespace AdditionalTask
                             isCompleted = false;
                             currentCluster.Content.Clear(); // <----- ШПИОН
 
-                        }
-
-                        //TODO пофиксить вот то что сверху ^
-                        
-                    }
-                    
-
-
-
+                        }   
+                    }       
                 }
                 if (isCompleted) {
                     break;
@@ -241,18 +255,73 @@ namespace AdditionalTask
                 }
 
             }
-            
             return temp;
         }
 
-        public static Cluster[,] ClasterizationWithDelta(List<Baggage> list, int delta)
+        public static List<ItemCluster> MegaClusterizationWithNumber
+            (List<Item> items, int number, string[] props)
         {
+            List<double> maxCoords = GetMaxCoords(items);
+            List<ItemCluster> clusters = new List<ItemCluster>();
+            List<Item> vectors = new List<Item>();
+            List<List<double>> distances = new List<List<double>>();
+            List<double> approximateDistances = new List<double>();
+            List<ItemCluster> tempClusters = new List<ItemCluster>();
 
+            // Creating clusters
+            for (int i = 0; i < number; i++)
+                clusters.Add(new ItemCluster());
+
+            // Creating vectors
+            for (int i = 0; i < props.Length; i++) {
+                vectors.Add(new Item(props.Length, 0, (int)maxCoords[i] + 1));
+                tempClusters.Add(new ItemCluster());
+            }
+
+            // Creating list of distances,
+            //  where: each list in distances is a distances from item[i] to some vector.
+            //         distance[i][j] is a [j] coordinate of some vector.
+            for (int i = 0; i < items.Count; i++) {
+                distances.Add(new List<double>());
+            }
+
+            while (true) {
+                // Getting each list in distances
+                for (int i = 0; i < distances.Count; i++) {
+                    // Getting each n-vector
+                    for (int j = 0; j < vectors.Count; j++) {
+                        // Getting each list in distances
+                        for (int k = 0; k < items.Count; k++) {
+                            distances[i].Add(vectors[j].GetDistance(items[k]));
+                        }
+                    }
+                }
+
+
+                for (int i = 0; i < distances.Count; i++) {
+                    int index = 0;
+                    double min = distances[i][0];
+
+                    for (int j = 0; j < distances[i].Count; j++) {
+                        if (distances[i][j] < min) {
+                            min = distances[i][j];
+                            index = j;
+                        }
+                    }
+
+
+                }
+
+            }
+
+            return clusters;
+        }
+        public static Cluster[,] ClusterizationWithDelta(List<Baggage> list, int delta)
+        {
             double minFragility = 0;
             double minWeight = 0;
             double maxWeight = 0;
             double maxFragility = 0;
-
 
             foreach (Baggage current in list) {
                 if (current.Weight > maxWeight) {
@@ -261,22 +330,14 @@ namespace AdditionalTask
                 if (current.Fragility > maxFragility) {
                     maxFragility = current.Fragility;
                 }
-            }
-            
-            
-            int xClusters = (int)(minFragility / delta);  //number of clusters deleted because of relative coordinates
-            int yClusters = (int)(minWeight / delta);
-
-           
+            }         
 
             double width = maxFragility;
-            double height = maxWeight;
+            double height = maxWeight;         
 
-            //Point[,] arr = new Point[Convert.ToInt32(Math.Ceiling(width / delta)),Convert.ToInt32(Math.Ceiling(height/delta))];
-
-            Cluster[,] temp = new Cluster[Convert.ToInt32(Math.Ceiling(height / delta) + 10),Convert.ToInt32(Math.Ceiling(width / delta)) + 10];
-
-            
+            Cluster[,] temp = new Cluster[Convert.ToInt32
+                (Math.Ceiling(height / delta) + 10),
+                Convert.ToInt32(Math.Ceiling(width / delta)) + 10];          
 
             for (int i = 0; i < temp.GetLength(0); i++) {
                 for (int j = 0; j < temp.GetLength(1); j++) {
@@ -295,27 +356,87 @@ namespace AdditionalTask
                 }
             }
 
-
-
             foreach (Baggage currentBaggage in list) {
-
                 int index1 = (int)(currentBaggage.Weight / delta);
                 int index2 = (int)(currentBaggage.Fragility / delta);
-
                 temp[index1,index2].Content.Add(currentBaggage);
-
-
             }
 
-
             return temp;
-
-
-
-
         }
 
-        
+        public static List<ItemCluster> MegaClusterizationWithDelta
+            (List<Item> items, double delta)
+        {
+            List<double> minCoords = GetMinCoords(items);
+            List<double> maxCoords = GetMaxCoords(items);
+            List<int> dimsCells = maxCoords.Select(c => Convert.ToInt32(Math.Ceiling(c / delta))).ToList();
+
+            int clustersCount = 1;
+            foreach (var d in dimsCells) {
+                clustersCount *= d;
+            }
+
+            List<ItemCluster> clusters = new List<ItemCluster>();           
+
+            foreach (var item in items) {
+                List<double> cords = new List<double>();
+
+                for (int i = 0; i < item.Coords.Count; i++)
+                    cords.Add(Math.Floor(item.Coords[i] / delta));
+
+                if (clusters.Count == 0) {
+                    clusters.Add(new ItemCluster(new List<Item>() { item }, cords));
+                }
+                else {
+                    bool wasAdded = false;
+                    foreach(var clust in clusters) {
+                        if (clust.StartCoords.SequenceEqual(cords)) {
+                            wasAdded = true;
+                            clust.Content.Add(item);
+                            break;
+                        }                         
+                    }
+
+                    if (!wasAdded) {
+                        clusters.Add(new ItemCluster(new List<Item>() { item }, cords));
+                    }
+                }           
+            }
+       
+
+            return clusters;
+        }
+
+        public static List<double> GetMinCoords(List<Item> items)
+        {
+            List<double> retList = new List<double>();
+
+            for (int i = 0; i < items[0].Coords.Count; i++) {
+                retList.Add(items[0].Coords[i]);
+            }
+
+            foreach (var item in items) {
+                for (int i = 0; i < item.Coords.Count; i++) {
+                    retList[i] = Math.Min(item.Coords[i], retList[i]);
+                }
+            }
+            return retList;
+        }
+        public static List<double> GetMaxCoords(List<Item> items) {
+            List<double> retList = new List<double>(items[0].Coords.Count);
+
+            for (int i = 0; i < items[0].Coords.Count; i++) {
+                retList.Add(items[0].Coords[i]);
+            }
+
+            foreach (var item in items) {
+                for (int i = 0; i < item.Coords.Count; i++) {
+                    retList[i] = Math.Max(item.Coords[i], retList[i]);
+                }
+            }
+            return retList;
+        }
 
 
     }
