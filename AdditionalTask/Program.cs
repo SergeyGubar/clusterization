@@ -59,32 +59,32 @@ namespace AdditionalTask
             #endregion
 
             #region TestWithNumber
-            //string[] properties = { "Weight", "Fragility"};
-            //List<SuperCluster> testClustersList = new List<SuperCluster>();
-            //List<SuperBaggage> testListBaggages = new List<SuperBaggage>();
+            string[] properties = { "Weight", "Fragility","Height", "Asd" };
+            List<SuperCluster> testClustersList = new List<SuperCluster>();
+            List<SuperBaggage> testListBaggages = new List<SuperBaggage>();
 
-            //for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
 
-            //    List<double> temp = new List<double>();
-
-
-            //    for (int j = 0; j < properties.Length; j++) {
-            //        temp.Add(random.Next(0,100));
-            //    }
-
-            //    testListBaggages.Add(new SuperBaggage(properties, temp));
+                List<double> temp = new List<double>();
 
 
-            //}
+                for (int j = 0; j < properties.Length; j++) {
+                    temp.Add(random.Next(0, 100));
+                }
+
+                testListBaggages.Add(new SuperBaggage(properties, temp));
 
 
-            //testClustersList = ClusterizationWithNumber(testListBaggages, 3, properties);
+            }
 
-            //Console.WriteLine(testClustersList);
 
-            //foreach (SuperCluster currCluster in testClustersList) {
-            //    Console.WriteLine(currCluster);
-            //}
+            testClustersList = SuperMegaClusterizationWithNumber(testListBaggages, 3, properties);
+
+            Console.WriteLine(testClustersList);
+
+            foreach (SuperCluster currCluster in testClustersList) {
+                Console.WriteLine(currCluster);
+            }
 
 
 
@@ -95,20 +95,20 @@ namespace AdditionalTask
 
             #region TestWithSuperDelta
 
-            int delta = 20;
+            //int delta = 20;
 
-            List<Item> items = new List<Item>();
+            //List<Item> items = new List<Item>();
 
-            for (int i = 0; i < 128; i++) {
-                items.Add(new Item(0, RandCoords(4, 0, 60)));
-            }
+            //for (int i = 0; i < 128; i++) {
+            //    items.Add(new Item(0, RandCoords(4, 0, 60)));
+            //}
 
-            List<ItemCluster> cl = MegaClusterizationWithDelta(items, delta);
-            Console.WriteLine("Delta: " + delta);
-            foreach (var c in cl) {
-                Console.Write("Cluster n ------------------------------------\n");
-                Console.WriteLine(c.ToString() + "\n");
-            }
+            //List<ItemCluster> cl = MegaClusterizationWithDelta(items, delta);
+            //Console.WriteLine("Delta: " + delta);
+            //foreach (var c in cl) {
+            //    Console.Write("Cluster n ------------------------------------\n");
+            //    Console.WriteLine(c.ToString() + "\n");
+            //}
 
             #endregion
 
@@ -184,7 +184,7 @@ namespace AdditionalTask
 
         }
 
-
+        //работает, но походу неправильно
         public static List<SuperCluster> ClusterizationWithNumber(List<SuperBaggage> listOfBaggages, int number, string[] props)
         {
             List<SuperCluster> temp = new List<SuperCluster>();
@@ -227,12 +227,14 @@ namespace AdditionalTask
                     List<double> midCoordinates = new List<double>();
                     List<double> sumCoordinates = new List<double>();
 
+
+                    //ошибка 
                     foreach (SuperBaggage currentSuperBaggage in listOfBaggages) {
                         for (int i = 0; i < currentSuperBaggage.Coords.Count; i++) {
                             sumCoordinates.Add(currentSuperBaggage.Coords[i]);
                         }
                     }
-
+                    //ошибка
 
                     for (int i = 0; i < sumCoordinates.Count; i++) {
                         midCoordinates.Add(sumCoordinates[i] / currentCluster.Content.Count);
@@ -257,7 +259,7 @@ namespace AdditionalTask
             }
             return temp;
         }
-
+        //работает(или нет) исключительно на древней магии ацтеков. НЕ ТРОГАТЬ
         public static List<ItemCluster> MegaClusterizationWithNumber
             (List<Item> items, int number, string[] props)
         {
@@ -406,6 +408,100 @@ namespace AdditionalTask
        
 
             return clusters;
+        }
+
+        //                                                                           
+        //                                                                           
+        //   z    z   zzzzzzz    z        zzz                                        
+        //   z   z    z    z    z z    zzz      z                       zzzz zz      
+        //   z zz     z    z    z z   z        z    z      zzzzzz      zz  zzzzz     
+        //   zz       z    z   z  z   z        z    z       z   zz     z       zz    
+        //   z        z    z  zzzzz   z        z    z       z    z     z        z    
+        //   zz       zzzzzz  z    z  z        z    z       z    z     z        z    
+        //   z z      z      z     z  zz       z    zz      z   zz     z        z    
+        //   z  z     z     z      z    zz     z    z      zzzzz       z        z    
+        //   z   z    z     z      z      zz   z   zz       z zzz     zz        zz   
+        //   z        z                        z zzzz       z   z      z        zz   
+        //                                     zzz  zzz     zzz z      z       zz    
+        //                                                     z       z       z     
+        //                                                              zz zzzzz     
+        //                                                                zz         
+        //                                                                           
+        //                                                                           
+        //                                                                         
+        public static List<SuperCluster> SuperMegaClusterizationWithNumber(List<SuperBaggage> listOfBaggages, int numberOfClusters, string[] props)
+        {
+            List<SuperCluster> result = new List<SuperCluster>();
+
+            for (int i = 0; i < numberOfClusters; i++) {
+
+                SuperCluster tempCluster = new SuperCluster();
+                List<double> centerValues = new List<double>();
+
+                for (int j = 0; j < props.Length; j++) {
+                    centerValues.Add(random.Next(0, 100));
+                }
+
+                tempCluster.Center = new SuperCenter(centerValues); //заполняем центр кластера 
+                result.Add(tempCluster);  //добавим этот кластер в результат 
+                
+
+            }
+
+            while (true) {
+                foreach (var currentBaggage in listOfBaggages) {
+                    double minDistance = result[0].GetDistance(currentBaggage.Coords);
+                    SuperCluster minCluster = result[0];
+
+                    foreach (var currentCluster in result) {
+                        if (currentCluster.GetDistance(currentBaggage.Coords) < minDistance) {
+                            minDistance = currentCluster.GetDistance(currentBaggage.Coords);
+                            minCluster = currentCluster;
+                        }
+                    }
+                    minCluster.Content.Add(currentBaggage);
+
+                }
+
+                bool isCompleted = true;
+
+                foreach (var currentCluster in result) {
+                    List<double> sumCoordinates = new List<double>();
+                    List<double> midCoordinates = new List<double>();
+                    double sum = 0;
+
+                    for (int i = 0; i < props.Length; i++) {
+                        foreach (var currBagagge in currentCluster.Content) {
+                            sum += currBagagge.Coords[i];
+
+                        }
+                        sumCoordinates.Add(sum);
+                        sum = 0;
+                    }
+
+                    for (int i = 0; i < sumCoordinates.Count; i++) {
+                        midCoordinates.Add(sumCoordinates[i] / currentCluster.Content.Count);
+                    }
+                    for (int j = 0; j < currentCluster.Center.Coords.Count; j++) {
+
+                        if (Math.Abs(currentCluster.Center.Coords[j] - midCoordinates[j]) > 0.5) {
+
+                            currentCluster.Center.Coords[j] = midCoordinates[j];
+                            isCompleted = false;
+                            currentCluster.Content.Clear();
+
+                        }
+                    }
+
+                }
+                if (isCompleted) {
+                    break;
+
+                }
+
+            }
+
+            return result;
         }
 
         public static List<double> GetMinCoords(List<Item> items)

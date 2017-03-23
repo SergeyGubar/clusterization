@@ -12,6 +12,7 @@ namespace AdditionalTask
 
         public SuperCenter Center;
         
+        public List<double> centerCoords = new List<double>();
 
         public SuperCluster()
         {
